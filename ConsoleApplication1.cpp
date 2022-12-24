@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 using namespace std;
 
 class Animal
@@ -28,6 +29,9 @@ public:
 	int getСageNumber() {
 		return cage_number;
 	}
+	~Animal() {
+		cout << "Удален: " << name << endl;
+	}
 
 private:
 	string name;
@@ -38,19 +42,23 @@ private:
 
 class Zoo {
 private:
-	Animal* animals;
-	int animal_count = 0;
+	vector <Animal*> animals;
 public:
-	Zoo(Animal* amls, int count) {
-		animals = amls;
-		animal_count = count;
-	}
 	void displayAnimals() {
-		for (int i = 0; i < animal_count; i++) {
-			cout << "Имя животного: " << animals[i].getName() << endl;
-			cout << "Номер клетки: " << animals[i].getСageNumber() << endl;
-			cout << "Что ест животное: " << animals[i].getFoodType() << endl;
+		for (int i = 0; i < animals.size(); i++) {
+			cout << "Имя животного: " << animals[i]->getName() << endl;
+			cout << "Номер клетки: " << animals[i]->getСageNumber() << endl;
+			cout << "Что ест животное: " << animals[i]->getFoodType() << endl;
 			cout << endl;
+		}
+	}
+	void Add(Animal* animal)
+	{
+		animals.push_back(animal);
+	}
+	~Zoo() {
+		for (int i = 0; i < animals.size(); i++) {
+			delete animals[i];
 		}
 	}
 };
@@ -62,15 +70,14 @@ public:
 int main()
 {
 	setlocale(LC_ALL, "Russian");
-	Animal tiger("Тигр", 1, "Плотоядный");
-	Animal bear("Медведь", 2, "Всеядный");
-	Animal rabbit("Кролик", 3, "Травоядный");
-	Animal *amls = new Animal[3];
-	amls[0] = tiger;
-	amls[1] = bear;
-	amls[2] = rabbit;
-	Zoo zoo_1(amls, 3);
-	zoo_1.displayAnimals();
+	Animal* tiger = new Animal("Тигр", 1, "Плотоядный");
+	Animal* bear = new Animal("Медведь", 2, "Всеядный");
+	Animal* rabbit = new Animal("Кролик", 3, "Травоядный");
+	Zoo zoo1;
+	zoo1.Add(tiger);
+	zoo1.Add(bear);
+	zoo1.Add(rabbit);
+	zoo1.displayAnimals();
 
 }
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
